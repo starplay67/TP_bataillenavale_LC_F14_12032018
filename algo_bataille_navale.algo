@@ -1,0 +1,84 @@
+ALGORITHME bataille_navale;
+
+TYPE : cell ENREGISTREMENT
+	row,col : entier;
+FIN ENREGISTREMENT
+
+TYPE : bateau ENREGISTREMENT
+	case1,case2,case3 : cell;
+FIN ENRIGSTREMENT
+
+TYPE : flotte ENREGISTREMENT
+	bateau1,bateau2,bateau3 : bateau;
+FIN ENREGISTREMENT
+
+procedure creation_case (cpt : integer;ma_case:cell) // Créer une constante MAX
+	POUR cpt DE 1 à MAX FAIRE
+		ma_case.row<-cpt
+		ma_case.col<-cpt
+	FIN POUR
+FIN procedure
+
+fonction comparaison_cases (ma_case:cell,mon_bateau:bateau) : booleen
+	comparaison_cases<-((ma_case=mon_bateau.case1)OU(ma_case=mon_bateau.case2)OU(ma_case=mon_bateau.case3))
+FIN fonction
+
+procedure creation_bateau (mon_bateau:bateau)
+	TANT QUE (((mon_bateau.case1.row<1)OU(mon_bateau.case1.row>MAX))ET((mon_bateau.case1.col<1)OU(mon_bateau.case1.col>MAX)))
+	ECRIRE "Entrez la premiere case de votre bateau, d'abord la ligne puis la colonne"
+	LIRE mon_bateau.case1.row
+	LIRE mon_bateau.case1.col
+	FIN TANT QUE
+	TANT QUE ((((mon_bateau.case2.row<>mon_bateau.case1.row-1)OU(mon_bateau.case2.row<>mon_bateau.case1.row+1))ET(mon_bateau.case2.col<>mon_bateau.case1.col))OU(((mon_bateau.case2.col<>mon_bateau.case1.col-1)OU(mon_bateau.case2.col<>mon_bateau.case1.col+1))ET(mon_bateau.case2.row<>mon_bateau.case1.row))ET((mon_bateau.case2.row<1)OU(mon_bateau.case2.row>MAX))ET((mon_bateau.case2.col<1)OU(mon_bateau.case2.col>MAX))) FAIRE
+		ECRIRE "Entrez la deuxieme case de votre bateau, d'abord la ligne puis la colonne"
+		LIRE mon_bateau.case2.row
+		LIRE mon_bateau.case2.col
+	FIN TANT QUE
+	TANT QUE ((((mon_bateau.case3.row<>mon_bateau.case2.row-1)OU(mon_bateau.case3.row<>mon_bateau.case2.row+1))ET(mon_bateau.case3.col<>mon_bateau.case2.col))OU(((mon_bateau.case3.col<>mon_bateau.case2.col-1)OU(mon_bateau.case3.col<>mon_bateau.case2.col+1))ET(mon_bateau.case3.row<>mon_bateau.case2.row))ET((mon_bateau.case3.row<1)OU(mon_bateau.case3.row>MAX))ET((mon_bateau.case3.col<1)OU(mon_bateau.case3.col>MAX))) FAIRE
+		ECRIRE "Entrez la troisieme case de votre bateau, d'abord la ligne puis la colonne"
+		LIRE mon_bateau.case3.row
+		LIRE mon_bateau.case3.col
+	FIN TANT QUE
+FIN PROCEDURE
+
+fonction touche_bateau (ma_case:cell,mon_bateau:bateau,comparaison_case:boolean) : boolean
+	comparaison_case(ma_case,mon_bateau)
+	touche_bateau<-comparaison_case
+FIN FONCTION
+
+fonction touche_flotte (touche_bateau:boolean) : boolean
+	touche_flotte<-(coule=3)
+FIN FONCTION
+	
+
+CONST
+
+	MAX<-3:integer
+
+VAR
+	coule,erreur : entier
+	ma_case:cell
+	mon_bateau:bateau
+	ma_flotte:flotte
+
+DEBUT
+	coule<-0
+	erreur<-0
+	creation_case(ma_case)
+	creation_bateau
+	TANT QUE ((touche_flotte=FAUX)OU(erreur=10)) FAIRE
+		ECRIRE "Proposez une case"
+		LIRE ma_case
+		SI (touche_bateau=VRAI) FAIRE
+			ECRIRE "Touche !"
+			coule<-(coule+1)
+		SINON
+		ECRIRE "Rate !"
+		erreur<-(erreur+1)
+	FIN TANT QUE
+	SI (touche_flotte=VRAI) ALORS
+		ECRIRE "L'attaquant a gagne !"
+	SINON 
+		ECRIRE "La flotte a gagne !"
+	FIN SI
+FIN
